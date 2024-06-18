@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stack>
 #include <queue>
+#include <fstream>
 
 using namespace std;
 
@@ -9,7 +10,59 @@ private:
     stack<int> mystack;
     queue<int> myqueue;
 
+    // Save stack to file
+    void saveStackToFile() {
+        ofstream outfile("stack.txt");
+        stack<int> temp = mystack;
+        while (!temp.empty()) {
+            outfile << temp.top() << endl;
+            temp.pop();
+        }
+        outfile.close();
+    }
+
+    // Load stack from file
+    void loadStackFromFile() {
+        ifstream infile("stack.txt");
+        int value;
+        while (infile >> value) {
+            mystack.push(value);
+        }
+        infile.close();
+    }
+
+    // Save queue to file
+    void saveQueueToFile() {
+        ofstream outfile("queue.txt");
+        queue<int> temp = myqueue;
+        while (!temp.empty()) {
+            outfile << temp.front() << endl;
+            temp.pop();
+        }
+        outfile.close();
+    }
+
+    // Load queue from file
+    void loadQueueFromFile() {
+        ifstream infile("queue.txt");
+        int value;
+        while (infile >> value) {
+            myqueue.push(value);
+        }
+        infile.close();
+    }
+
 public:
+    StackQueueManager() {
+        loadStackFromFile();
+        loadQueueFromFile();
+    }
+
+    ~StackQueueManager() {
+        saveStackToFile();
+        saveQueueToFile();
+    }
+
     void stackMenu() {
         int choice, ele;
 
@@ -17,7 +70,7 @@ public:
             // Display stack menu options
             cout << endl;
             cout << "Stack Operations:" << endl;
-            cout << "1. Push\n2. Pop\n3. Display\n4. Size \n5. Back to Main Menu" << endl;
+            cout << "1. Push\n2. Pop\n3. Display\n4. Size\n5. Back to Main Menu" << endl;
             cout << "Enter your choice: ";
             // Get user choice
             cin >> choice;
@@ -26,7 +79,7 @@ public:
             switch (choice) {
                 case 1:
                     // Push element onto the stack
-                    cout << "Push Element : ";
+                    cout << "Push Element: ";
                     cin >> ele;
                     mystack.push(ele);
                     cout << ele << " pushed into stack...." << endl;
@@ -35,7 +88,7 @@ public:
                 case 2:
                     // Pop element from the stack
                     if (!mystack.empty()) {
-                        cout << mystack.top() << " is popped";
+                        cout << mystack.top() << " is popped" << endl;
                         mystack.pop();
                     } else {
                         cout << "Stack Underflow!" << endl;
@@ -45,7 +98,7 @@ public:
                 case 3:
                     // Display elements in the stack
                     if (!mystack.empty()) {
-                        cout << "Elements in Stack are : \n";
+                        cout << "Elements in Stack are: \n";
                         stack<int> temp = mystack;
                         while (!temp.empty()) {
                             cout << temp.top() << "\t";
@@ -53,11 +106,12 @@ public:
                         }
                         cout << endl;
                     } else {
-                        cout << "No elements in the Stack";
+                        cout << "No elements in the Stack" << endl;
                     }
                     break;
 
                 case 4:
+                    // Display size of the stack
                     cout << "Size of stack: " << mystack.size() << endl;
                     break;
 
@@ -79,7 +133,7 @@ public:
             // Display queue menu options
             cout << endl;
             cout << "Queue Operations:" << endl;
-            cout << "1. Enqueue\n2. Dequeue\n3. Display\n4. Size \n5. Front Element\n6. Back Element\n7. Back to Main Menu" << endl;
+            cout << "1. Enqueue\n2. Dequeue\n3. Display\n4. Size\n5. Front Element\n6. Back Element\n7. Back to Main Menu" << endl;
             cout << "Enter your choice: ";
             // Get user choice
             cin >> choice;
@@ -97,9 +151,8 @@ public:
                 case 2:
                     // Dequeue element from the queue
                     if (!myqueue.empty()) {
-                        cout << myqueue.front() << " is dequeued";
+                        cout << myqueue.front() << " is dequeued" << endl;
                         myqueue.pop();
-                        cout << endl;
                     } else {
                         cout << "Queue Underflow..!!" << endl;
                     }
@@ -108,6 +161,7 @@ public:
                 case 3:
                     // Display elements in the queue
                     if (!myqueue.empty()) {
+                        cout << "Elements in Queue are: \n";
                         queue<int> temp = myqueue;
                         while (!temp.empty()) {
                             cout << temp.front() << " ";
@@ -120,12 +174,12 @@ public:
                     break;
 
                 case 4:
+                    // Display size of the queue
                     cout << "Size of queue: " << myqueue.size() << endl;
                     break;
 
                 case 5:
                     // Display front element in the queue
-                    cout << "Front Item" << endl;
                     if (!myqueue.empty()) {
                         cout << "Front element: " << myqueue.front() << endl;
                     } else {
@@ -135,14 +189,12 @@ public:
 
                 case 6:
                     // Display back element in the queue
-                    cout << "Back Item" << endl;
                     if (!myqueue.empty()) {
                         cout << "Back element: " << myqueue.back() << endl;
                     } else {
                         cout << "No elements in Queue..." << endl;
                     }
                     break;
-
 
                 case 7:
                     // Back to the main menu
